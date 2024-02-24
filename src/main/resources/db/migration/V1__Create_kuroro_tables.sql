@@ -1,0 +1,65 @@
+CREATE TABLE kuroro
+(
+    internal_id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id            VARCHAR(255) NOT NULL UNIQUE,
+    name          VARCHAR(255) NOT NULL,
+    hit_points    INT,
+    attack        INT,
+    defense       INT,
+    magic_attack  INT,
+    magic_defense INT,
+    speed         INT,
+    lore          VARCHAR(1000),
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE type
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    type_name  VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE kuroro_type
+(
+    kuroro_id  BIGINT NOT NULL,
+    type_id    BIGINT NOT NULL,
+    PRIMARY KEY (kuroro_id, type_id),
+    FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id),
+    FOREIGN KEY (type_id) REFERENCES type (id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user
+(
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nickname   VARCHAR(255) NOT NULL UNIQUE,
+    password   VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE team
+(
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id    BIGINT       NOT NULL,
+    name       VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE team_kuroro
+(
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
+    team_id    BIGINT NOT NULL,
+    kuroro_id  BIGINT NOT NULL,
+    FOREIGN KEY (team_id) REFERENCES team (id),
+    FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
