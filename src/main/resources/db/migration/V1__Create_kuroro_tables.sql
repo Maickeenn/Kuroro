@@ -14,6 +14,16 @@ CREATE TABLE kuroro
     updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE move
+(
+    id       BIGINT       NOT NULL AUTO_INCREMENT,
+    name     VARCHAR(255) NOT NULL,
+    power    INT,
+    description VARCHAR(255) NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE type
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -31,6 +41,15 @@ CREATE TABLE kuroro_type
     FOREIGN KEY (type_id) REFERENCES type (id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE move_type
+(
+    move_id BIGINT NOT NULL,
+    type_id BIGINT NOT NULL,
+    PRIMARY KEY (move_id, type_id),
+    FOREIGN KEY (move_id) REFERENCES move (id),
+    FOREIGN KEY (type_id) REFERENCES type (id)
 );
 
 CREATE TABLE user
@@ -62,4 +81,34 @@ CREATE TABLE team_kuroro
     FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE move_kuroro
+(
+    team_kuroro_id BIGINT NOT NULL,
+    move_id        BIGINT NOT NULL,
+    PRIMARY KEY (team_kuroro_id, move_id),
+    FOREIGN KEY (team_kuroro_id) REFERENCES team_kuroro (id),
+    FOREIGN KEY (move_id) REFERENCES move (id)
+);
+
+CREATE TABLE bonus_stats
+(
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    hit_points    INT,
+    attack        INT,
+    defense       INT,
+    magic_attack  INT,
+    magic_defense INT,
+    speed         INT,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE bonus_stats_kuroro
+(
+    team_kuroro_id  BIGINT NOT NULL,
+    bonus_stats_id BIGINT NOT NULL,
+    PRIMARY KEY (team_kuroro_id, bonus_stats_id),
+    FOREIGN KEY (team_kuroro_id) REFERENCES team_kuroro (id),
+    FOREIGN KEY (bonus_stats_id) REFERENCES bonus_stats (id)
 );

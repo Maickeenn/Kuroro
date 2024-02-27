@@ -1,0 +1,13 @@
+INSERT INTO type (type_name) VALUES ('Earth');
+INSERT INTO type (type_name) VALUES ('Metal');
+INSERT INTO type (type_name) VALUES ('Corrosion');
+INSERT INTO type (type_name) VALUES ('Light');
+INSERT INTO type (type_name) VALUES ('Electric');
+INSERT INTO type (type_name) VALUES ('Wind');
+INSERT INTO type (type_name) VALUES ('Combat');
+INSERT INTO type (type_name) VALUES ('Spirit');
+INSERT INTO type (type_name) VALUES ('Plant');
+INSERT INTO type (type_name) VALUES ('Support');
+INSERT INTO type (type_name) VALUES ('Dark');
+INSERT INTO type (type_name) VALUES ('Fire');
+INSERT INTO type (type_name) VALUES ('Water');

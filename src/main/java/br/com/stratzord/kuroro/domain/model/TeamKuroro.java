@@ -6,9 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import java.util.Set;
 import lombok.Data;
 
+//Slot
 @Entity(name = "team_kuroro")
 @Data
 public class TeamKuroro {
@@ -25,4 +29,16 @@ public class TeamKuroro {
   @ManyToOne
   @JoinColumn(name = "kuroro_id", nullable = false)
   private Kuroro kuroro;
+
+  @ManyToMany
+  @JoinTable(name = "move_kuroro",
+             joinColumns = @JoinColumn(name = "team_kuroro_id"),
+             inverseJoinColumns = @JoinColumn(name = "move_id"))
+  private Set<Move> moves;
+
+  @ManyToMany
+  @JoinTable(name = "bonus_stats_kuroro",
+             joinColumns = @JoinColumn(name = "team_kuroro_id"),
+             inverseJoinColumns = @JoinColumn(name = "bonus_stats_id"))
+  private Set<BonusStats> bonusStats;
 }

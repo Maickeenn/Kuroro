@@ -27,7 +27,7 @@ public class KuroroController {
   @GetMapping
   public ResponseEntity<List<Kuroro>> getAllCreatures() {
     return new ResponseEntity<>(kuroroService.getAllCreatures(), HttpStatus.OK);
-  }
+  } 
 
   @GetMapping("/{id}")
   public ResponseEntity<Kuroro> getCreatureById(@PathVariable String id) {

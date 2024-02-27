@@ -5,27 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import java.util.List;
 import lombok.Data;
 
-@Entity
+@Entity(name = "bonus_stats")
 @Data
-public class Kuroro {
+public class BonusStats {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "internal_id", nullable = false, unique = true)
-  private Long internalId;
-
   @Column(name = "id", nullable = false, unique = true)
-  private String id;
-
-  @Column(name = "name", nullable = false)
-  private String name;
-
+  private Long id;
 
   @Column(name = "hit_points")
   private int hitPoints;
@@ -44,14 +33,5 @@ public class Kuroro {
 
   @Column(name = "speed")
   private int speed;
-
-  @Column(length = 1000)
-  private String lore;
-
-  @ManyToMany
-  @JoinTable(name = "kuroro_type",
-             joinColumns = @JoinColumn(name = "kuroro_id"),
-             inverseJoinColumns = @JoinColumn(name = "type_id"))
-  private List<Type> types;
 
 }

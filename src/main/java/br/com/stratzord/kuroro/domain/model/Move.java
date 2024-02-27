@@ -9,49 +9,35 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import java.util.List;
+import java.util.Set;
 import lombok.Data;
 
 @Entity
 @Data
-public class Kuroro {
+public class Move {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "internal_id", nullable = false, unique = true)
-  private Long internalId;
-
   @Column(name = "id", nullable = false, unique = true)
-  private String id;
+  private Long id;
 
   @Column(name = "name", nullable = false)
   private String name;
 
+  @Column(name = "power")
+  private int power;
 
-  @Column(name = "hit_points")
-  private int hitPoints;
 
-  @Column(name = "attack")
-  private int attack;
+  @Column(name = "description", nullable = false)
+  private String description;
 
-  @Column(name = "defense")
-  private int defense;
-
-  @Column(name = "magic_attack")
-  private int magicAttack;
-
-  @Column(name = "magic_defense")
-  private int magicDefense;
-
-  @Column(name = "speed")
-  private int speed;
-
-  @Column(length = 1000)
-  private String lore;
+  @Column(name = "category", nullable = false)
+  private String category;
 
   @ManyToMany
-  @JoinTable(name = "kuroro_type",
-             joinColumns = @JoinColumn(name = "kuroro_id"),
+  @JoinTable(name = "move_type",
+             joinColumns = @JoinColumn(name = "move_id"),
              inverseJoinColumns = @JoinColumn(name = "type_id"))
-  private List<Type> types;
+  private Set<Type> types;
 
 }
