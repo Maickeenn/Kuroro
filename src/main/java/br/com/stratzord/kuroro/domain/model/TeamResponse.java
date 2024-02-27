@@ -1,15 +1,14 @@
 package br.com.stratzord.kuroro.domain.model;
 
 import java.util.Set;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+@Builder
 public class TeamResponse {
   private Long teamId;
   private Long userId;
   private String name;
-  private Set<Kuroro> kuroros;
-
+  private Set<TeamKuroroResponse> kuroros;
 }

@@ -8,4 +8,5 @@ public interface TypeRepository extends JpaRepository<Type, Long> {
 
   Optional<Type> findByTypeName(String typeName);
 
+
 }

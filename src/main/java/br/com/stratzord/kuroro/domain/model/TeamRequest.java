@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class TeamRequest {
+
   private String nickname;
   private String name;
-  private List<Kuroro> kuroros;
-
+  private List<TeamKuroroRequest> teamKuroro;
 }

@@ -1,4 +1,4 @@
-INSERT INTO move (name, power, category, description) VALUES ('???', 0, 'Status', 'This move raises the users Mystic Defense by one stage.');
+INSERT INTO move (name, power, category, description) VALUES ('Sparkling Barrier', 0, 'Status', 'This move raises the users Mystic Defense by one stage.');
 INSERT INTO move (name, power, category, description) VALUES ('Acceleration', 0, 'Status', 'This move raises the users Speed by two stages.');
 INSERT INTO move (name, power, category, description) VALUES ('Acidic Flux', 100, 'Mystic', 'This move does damage to the opponent. ');
 INSERT INTO move (name, power, category, description) VALUES ('Acrid Bite', 90, 'Natural', 'This move becomes sequential when used on consecutive turns and increases in power. ');

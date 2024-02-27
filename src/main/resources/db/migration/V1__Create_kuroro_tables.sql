@@ -16,11 +16,11 @@ CREATE TABLE kuroro
 
 CREATE TABLE move
 (
-    id       BIGINT       NOT NULL AUTO_INCREMENT,
-    name     VARCHAR(255) NOT NULL,
-    power    INT,
+    id          BIGINT       NOT NULL AUTO_INCREMENT,
+    name        VARCHAR(255) NOT NULL,
+    power       INT,
     description VARCHAR(255) NOT NULL,
-    category VARCHAR(255) NOT NULL,
+    category    VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -28,6 +28,28 @@ CREATE TABLE type
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     type_name  VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bonus_stats
+(
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    hit_points    INT,
+    attack        INT,
+    defense       INT,
+    magic_attack  INT,
+    magic_defense INT,
+    speed         INT,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE user
+(
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nickname   VARCHAR(255) NOT NULL UNIQUE,
+    password   VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -52,16 +74,6 @@ CREATE TABLE move_type
     FOREIGN KEY (type_id) REFERENCES type (id)
 );
 
-CREATE TABLE user
-(
-    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
-    nickname   VARCHAR(255) NOT NULL UNIQUE,
-    password   VARCHAR(255) NOT NULL,
-    email      VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
 CREATE TABLE team
 (
     id         BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -77,8 +89,10 @@ CREATE TABLE team_kuroro
     id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     team_id    BIGINT NOT NULL,
     kuroro_id  BIGINT NOT NULL,
+    bonus_stats_id BIGINT NOT NULL,
     FOREIGN KEY (team_id) REFERENCES team (id),
     FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id),
+    FOREIGN KEY (bonus_stats_id) REFERENCES bonus_stats (id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -90,25 +104,4 @@ CREATE TABLE move_kuroro
     PRIMARY KEY (team_kuroro_id, move_id),
     FOREIGN KEY (team_kuroro_id) REFERENCES team_kuroro (id),
     FOREIGN KEY (move_id) REFERENCES move (id)
-);
-
-CREATE TABLE bonus_stats
-(
-    id            BIGINT NOT NULL AUTO_INCREMENT,
-    hit_points    INT,
-    attack        INT,
-    defense       INT,
-    magic_attack  INT,
-    magic_defense INT,
-    speed         INT,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE bonus_stats_kuroro
-(
-    team_kuroro_id  BIGINT NOT NULL,
-    bonus_stats_id BIGINT NOT NULL,
-    PRIMARY KEY (team_kuroro_id, bonus_stats_id),
-    FOREIGN KEY (team_kuroro_id) REFERENCES team_kuroro (id),
-    FOREIGN KEY (bonus_stats_id) REFERENCES bonus_stats (id)
 );

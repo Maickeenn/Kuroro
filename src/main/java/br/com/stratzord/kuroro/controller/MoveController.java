@@ -1,7 +1,6 @@
 package br.com.stratzord.kuroro.controller;
 
 import br.com.stratzord.kuroro.domain.model.Move;
-import br.com.stratzord.kuroro.service.KuroroService;
 import br.com.stratzord.kuroro.service.MoveService;
 import java.util.List;
 import org.springframework.http.HttpStatus;

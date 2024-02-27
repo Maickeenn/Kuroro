@@ -28,8 +28,8 @@ public class TeamController {
   }
 
   @PostMapping
-  public ResponseEntity<TeamResponse> createTeam(@RequestBody TeamRequest teamRequest) {
-    TeamResponse team = teamService.createTeam(teamRequest.getNickname(), teamRequest.getName(), teamRequest.getKuroros());
+  public ResponseEntity<Team> createTeam(@RequestBody TeamRequest teamRequest) {
+    Team team = teamService.createTeam(teamRequest.getNickname(), teamRequest.getName(), teamRequest.getTeamKuroro());
     return new ResponseEntity<>(team, HttpStatus.CREATED);
   }
 

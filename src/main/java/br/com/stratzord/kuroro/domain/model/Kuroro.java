@@ -10,6 +10,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import java.util.List;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Data
@@ -52,6 +54,7 @@ public class Kuroro {
   @JoinTable(name = "kuroro_type",
              joinColumns = @JoinColumn(name = "kuroro_id"),
              inverseJoinColumns = @JoinColumn(name = "type_id"))
+  @Fetch(FetchMode.JOIN)
   private List<Type> types;
 
 }

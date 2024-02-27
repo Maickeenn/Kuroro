@@ -1,4 +1,4 @@
-INSERT INTO move_type (move_id, type_id) VALUES ((SELECT id FROM move WHERE name = '???'), (SELECT id FROM type WHERE type_name = 'Support'));
+INSERT INTO move_type (move_id, type_id) VALUES ((SELECT id FROM move WHERE name = 'Sparkling Barrier'), (SELECT id FROM type WHERE type_name = 'Support'));
 INSERT INTO move_type (move_id, type_id) VALUES ((SELECT id FROM move WHERE name = 'Acceleration'), (SELECT id FROM type WHERE type_name = 'Support'));
 INSERT INTO move_type (move_id, type_id) VALUES ((SELECT id FROM move WHERE name = 'Acidic Flux'), (SELECT id FROM type WHERE type_name = 'Corrosion'));
 INSERT INTO move_type (move_id, type_id) VALUES ((SELECT id FROM move WHERE name = 'Acrid Bite'), (SELECT id FROM type WHERE type_name = 'Corrosion'));
