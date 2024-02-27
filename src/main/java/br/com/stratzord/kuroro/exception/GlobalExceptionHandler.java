@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler({UserNotFoundException.class, KuroroNotFoundException.class})
+  @ExceptionHandler({UserNotFoundException.class, KuroroNotFoundException.class, TeamNotFoundException.class})
   public ResponseEntity<ApiError> handleCreatureNotFoundException(RuntimeException ex) {
     ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);

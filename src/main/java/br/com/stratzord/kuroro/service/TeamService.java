@@ -16,10 +16,13 @@ import br.com.stratzord.kuroro.infrastructurure.repository.MoveRepository;
 import br.com.stratzord.kuroro.infrastructurure.repository.TeamKuroroRepository;
 import br.com.stratzord.kuroro.infrastructurure.repository.TeamRepository;
 import br.com.stratzord.kuroro.infrastructurure.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TeamService {
@@ -31,18 +34,21 @@ public class TeamService {
   private final MoveRepository moveRepository;
   private final BonusStatsRepository bonusStatsRepository;
 
+  private final EntityManager entityManager;
+
   public TeamService(TeamRepository teamRepository,
       UserRepository userRepository,
       TeamKuroroRepository teamKuroroRepository,
       KuroroRepository kuroroRepository,
       MoveRepository moveRepository,
-      BonusStatsRepository bonusStatsRepository) {
+      BonusStatsRepository bonusStatsRepository, EntityManager entityManager) {
     this.teamRepository = teamRepository;
     this.userRepository = userRepository;
     this.teamKuroroRepository = teamKuroroRepository;
     this.kuroroRepository = kuroroRepository;
     this.moveRepository = moveRepository;
     this.bonusStatsRepository = bonusStatsRepository;
+    this.entityManager = entityManager;
   }
 
   private Team getTeam(Long id) {
@@ -56,13 +62,15 @@ public class TeamService {
     return mapTeamToTeamResponse(team);
   }
 
-  public Team createTeam(String nickname, String name, List<TeamKuroroRequest> kuroros) {
+  @Transactional
+  public TeamResponse createTeam(String nickname, String name, List<TeamKuroroRequest> kuroros) {
     User user = userRepository.findByNickname(nickname)
                               .orElseThrow(() -> new UserNotFoundException(
                                   "No user found with nickname " + nickname));
     Team team = new Team();
     team.setUser(user);
     team.setName(name);
+    team.setTeamKuroros(new ArrayList<>());
     team = teamRepository.save(team);
 
     for (TeamKuroroRequest kuroro : kuroros) {
@@ -70,21 +78,21 @@ public class TeamService {
       teamKuroro.setKuroro(kuroroRepository.findById(kuroro.getKuroroId())
                                            .orElseThrow(() -> new TeamNotFoundException(
                                                "No kuroro found with id " + kuroro)));
-      Set<Move> moves = kuroro.getMoves()
-                              .stream()
-                              .map(move -> moveRepository.findById(Long.valueOf(move))
-                                                         .orElseThrow(() -> new TeamNotFoundException(
-                                                             "No move found with id " + move)))
-                              .collect(Collectors.toSet());
-      teamKuroro.setMoves(moves);
+      teamKuroro.setMoves(kuroro.getMoves()
+                                .stream()
+                                .map(move -> moveRepository.findById(Long.valueOf(move))
+                                                           .orElseThrow(() -> new TeamNotFoundException(
+                                                               "No move found with id " + move)))
+                                .collect(Collectors.toSet()));
       teamKuroro.setBonusStats(bonusStatsRepository.save(kuroro.getBonusStats()));
+      teamKuroro.setTeam(team);
       teamKuroroRepository.save(teamKuroro);
     }
-
-    return getTeam(team.getId());
+    entityManager.clear();
+    return mapTeamToTeamResponse(getTeam(team.getId()));
   }
 
-  public Team editTeam(Long id, List<Kuroro> kuroros) {
+  public TeamResponse editTeam(Long id, List<Kuroro> kuroros) {
     Team team = getTeam(id);
     teamKuroroRepository.deleteAll(team.getTeamKuroros());
 
@@ -94,7 +102,7 @@ public class TeamService {
       teamKuroroRepository.save(teamKuroro);
     }
 
-    return team;
+    return mapTeamToTeamResponse(getTeam(team.getId()));
   }
 
   public void deleteTeam(Long id) {
@@ -114,9 +122,9 @@ public class TeamService {
 
   public TeamResponse mapTeamToTeamResponse(Team team) {
     Set<TeamKuroroResponse> kuroroResponses = team.getTeamKuroros()
-                                 .stream()
-                                 .map(this::mapTeamKuroroToTeamKuroroResponse)
-                                 .collect(Collectors.toSet());
+                                                  .stream()
+                                                  .map(this::mapTeamKuroroToTeamKuroroResponse)
+                                                  .collect(Collectors.toSet());
 
     return TeamResponse.builder()
                        .teamId(team.getId())

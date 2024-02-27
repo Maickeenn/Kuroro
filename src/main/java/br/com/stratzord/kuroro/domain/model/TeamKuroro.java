@@ -26,6 +26,11 @@ public class TeamKuroro {
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "team_id", nullable = false)
+  @Fetch(FetchMode.JOIN)
+  private Team team;
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "kuroro_id", nullable = false)
   @Fetch(FetchMode.JOIN)
@@ -39,7 +44,7 @@ public class TeamKuroro {
   private Set<Move> moves;
 
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "bonus_stats_id")
+  @JoinColumn(name = "bonus_stats_id", nullable = false)
   @Fetch(FetchMode.JOIN)
   private BonusStats bonusStats;
 }

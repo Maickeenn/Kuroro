@@ -1,7 +1,6 @@
 package br.com.stratzord.kuroro.controller;
 
 import br.com.stratzord.kuroro.domain.model.Kuroro;
-import br.com.stratzord.kuroro.domain.model.Team;
 import br.com.stratzord.kuroro.domain.model.TeamRequest;
 import br.com.stratzord.kuroro.domain.model.TeamResponse;
 import br.com.stratzord.kuroro.service.TeamService;
@@ -28,8 +27,8 @@ public class TeamController {
   }
 
   @PostMapping
-  public ResponseEntity<Team> createTeam(@RequestBody TeamRequest teamRequest) {
-    Team team = teamService.createTeam(teamRequest.getNickname(), teamRequest.getName(), teamRequest.getTeamKuroro());
+  public ResponseEntity<TeamResponse> createTeam(@RequestBody TeamRequest teamRequest) {
+    TeamResponse team = teamService.createTeam(teamRequest.getNickname(), teamRequest.getName(), teamRequest.getTeamKuroro());
     return new ResponseEntity<>(team, HttpStatus.CREATED);
   }
 
@@ -40,8 +39,8 @@ public class TeamController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Team> editTeam(@PathVariable Long id, @RequestBody List<Kuroro> kuroros) {
-    Team team = teamService.editTeam(id, kuroros);
+  public ResponseEntity<TeamResponse> editTeam(@PathVariable Long id, @RequestBody List<Kuroro> kuroros) {
+    TeamResponse team = teamService.editTeam(id, kuroros);
     return ResponseEntity.ok(team);
   }
 

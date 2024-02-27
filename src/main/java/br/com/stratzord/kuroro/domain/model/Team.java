@@ -8,8 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -31,7 +31,7 @@ public class Team {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "team_kuroro",
              joinColumns = @JoinColumn(name = "team_id"),
              inverseJoinColumns = @JoinColumn(name = "kuroro_id"))
