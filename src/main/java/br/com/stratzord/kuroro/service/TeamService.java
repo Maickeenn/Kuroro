@@ -88,7 +88,8 @@ public class TeamService {
       teamKuroro.setTeam(team);
       teamKuroroRepository.save(teamKuroro);
     }
-    entityManager.clear();
+//    team = teamRepository.save(team);
+//    entityManager.clear();
     return mapTeamToTeamResponse(getTeam(team.getId()));
   }
 
