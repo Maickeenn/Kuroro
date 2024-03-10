@@ -55,4 +55,10 @@ public class TeamController {
     List<TeamResponse> teamResponses = teamService.getTeamsAndKurorosByUserId(userId);
     return ResponseEntity.ok(teamResponses);
   }
+
+  @GetMapping("/user/nickname/{nickname}")
+  public ResponseEntity<List<TeamResponse>> getTeamsAndKurorosByUserNickname(@PathVariable String nickname) {
+    List<TeamResponse> teamResponses = teamService.getTeamsAndKurorosByUserNickname(nickname);
+    return ResponseEntity.ok(teamResponses);
+  }
 }

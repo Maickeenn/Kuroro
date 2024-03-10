@@ -121,6 +121,18 @@ public class TeamService {
                     .toList();
   }
 
+  public List<TeamResponse> getTeamsAndKurorosByUserNickname(String nickname){
+
+    User user = userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException(
+        "No user found with nickname " + nickname));
+
+    List<Team> allByUser = teamRepository.findAllByUser(user);
+
+    return allByUser.stream()
+                    .map(this::mapTeamToTeamResponse)
+                    .toList();
+  }
+
   public TeamResponse mapTeamToTeamResponse(Team team) {
     Set<TeamKuroroResponse> kuroroResponses = team.getTeamKuroros()
                                                   .stream()
