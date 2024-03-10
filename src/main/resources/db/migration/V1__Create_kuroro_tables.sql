@@ -59,8 +59,8 @@ CREATE TABLE kuroro_type
     kuroro_id  BIGINT NOT NULL,
     type_id    BIGINT NOT NULL,
     PRIMARY KEY (kuroro_id, type_id),
-    FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id),
-    FOREIGN KEY (type_id) REFERENCES type (id),
+    FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES type (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -70,8 +70,8 @@ CREATE TABLE move_type
     move_id BIGINT NOT NULL,
     type_id BIGINT NOT NULL,
     PRIMARY KEY (move_id, type_id),
-    FOREIGN KEY (move_id) REFERENCES move (id),
-    FOREIGN KEY (type_id) REFERENCES type (id)
+    FOREIGN KEY (move_id) REFERENCES move (id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES type (id) ON DELETE CASCADE
 );
 
 CREATE TABLE team
@@ -81,7 +81,7 @@ CREATE TABLE team
     name       VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user (id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 );
 
 CREATE TABLE team_kuroro
@@ -90,9 +90,9 @@ CREATE TABLE team_kuroro
     team_id    BIGINT NOT NULL,
     kuroro_id  BIGINT NOT NULL,
     bonus_stats_id BIGINT NOT NULL,
-    FOREIGN KEY (team_id) REFERENCES team (id),
-    FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id),
-    FOREIGN KEY (bonus_stats_id) REFERENCES bonus_stats (id),
+    FOREIGN KEY (team_id) REFERENCES team (id) ON DELETE CASCADE,
+    FOREIGN KEY (kuroro_id) REFERENCES kuroro (internal_id) ON DELETE CASCADE,
+    FOREIGN KEY (bonus_stats_id) REFERENCES bonus_stats (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -102,6 +102,6 @@ CREATE TABLE move_kuroro
     team_kuroro_id BIGINT NOT NULL,
     move_id        BIGINT NOT NULL,
     PRIMARY KEY (team_kuroro_id, move_id),
-    FOREIGN KEY (team_kuroro_id) REFERENCES team_kuroro (id),
-    FOREIGN KEY (move_id) REFERENCES move (id)
+    FOREIGN KEY (team_kuroro_id) REFERENCES team_kuroro (id) ON DELETE CASCADE,
+    FOREIGN KEY (move_id) REFERENCES move (id) ON DELETE CASCADE
 );

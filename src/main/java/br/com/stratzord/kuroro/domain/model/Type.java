@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import java.util.List;
 import lombok.Data;
 
 @Entity
@@ -18,5 +20,8 @@ public class Type {
 
   @Column(name = "type_name", nullable = false, unique = true)
   private String typeName;
+
+  @ManyToMany(mappedBy = "types")
+  private List<Kuroro> kuroros;
 
 }

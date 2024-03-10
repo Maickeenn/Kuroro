@@ -1,11 +1,11 @@
 package br.com.stratzord.kuroro.service;
 
-import br.com.stratzord.kuroro.domain.model.Kuroro;
 import br.com.stratzord.kuroro.domain.model.Move;
 import br.com.stratzord.kuroro.domain.model.Team;
 import br.com.stratzord.kuroro.domain.model.TeamKuroro;
 import br.com.stratzord.kuroro.domain.model.TeamKuroroRequest;
 import br.com.stratzord.kuroro.domain.model.TeamKuroroResponse;
+import br.com.stratzord.kuroro.domain.model.TeamRequest;
 import br.com.stratzord.kuroro.domain.model.TeamResponse;
 import br.com.stratzord.kuroro.domain.model.User;
 import br.com.stratzord.kuroro.exception.TeamNotFoundException;
@@ -16,7 +16,6 @@ import br.com.stratzord.kuroro.infrastructurure.repository.MoveRepository;
 import br.com.stratzord.kuroro.infrastructurure.repository.TeamKuroroRepository;
 import br.com.stratzord.kuroro.infrastructurure.repository.TeamRepository;
 import br.com.stratzord.kuroro.infrastructurure.repository.UserRepository;
-import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,21 +33,19 @@ public class TeamService {
   private final MoveRepository moveRepository;
   private final BonusStatsRepository bonusStatsRepository;
 
-  private final EntityManager entityManager;
 
   public TeamService(TeamRepository teamRepository,
       UserRepository userRepository,
       TeamKuroroRepository teamKuroroRepository,
       KuroroRepository kuroroRepository,
       MoveRepository moveRepository,
-      BonusStatsRepository bonusStatsRepository, EntityManager entityManager) {
+      BonusStatsRepository bonusStatsRepository) {
     this.teamRepository = teamRepository;
     this.userRepository = userRepository;
     this.teamKuroroRepository = teamKuroroRepository;
     this.kuroroRepository = kuroroRepository;
     this.moveRepository = moveRepository;
     this.bonusStatsRepository = bonusStatsRepository;
-    this.entityManager = entityManager;
   }
 
   private Team getTeam(Long id) {
@@ -88,18 +85,28 @@ public class TeamService {
       teamKuroro.setTeam(team);
       teamKuroroRepository.save(teamKuroro);
     }
-//    team = teamRepository.save(team);
+    team = teamRepository.save(team);
 //    entityManager.clear();
     return mapTeamToTeamResponse(getTeam(team.getId()));
   }
 
-  public TeamResponse editTeam(Long id, List<Kuroro> kuroros) {
+  public TeamResponse editTeam(Long id, TeamRequest kuroros) {
     Team team = getTeam(id);
     teamKuroroRepository.deleteAll(team.getTeamKuroros());
 
-    for (Kuroro kuroro : kuroros) {
+    for (TeamKuroroRequest kuroro : kuroros.getTeamKuroro()) {
       TeamKuroro teamKuroro = new TeamKuroro();
-      teamKuroro.setKuroro(kuroro);
+      teamKuroro.setKuroro(kuroroRepository.findById(kuroro.getKuroroId())
+                                           .orElseThrow(() -> new TeamNotFoundException(
+                                               "No kuroro found with id " + kuroro)));
+      teamKuroro.setMoves(kuroro.getMoves()
+                                .stream()
+                                .map(move -> moveRepository.findById(Long.valueOf(move))
+                                                           .orElseThrow(() -> new TeamNotFoundException(
+                                                               "No move found with id " + move)))
+                                .collect(Collectors.toSet()));
+      teamKuroro.setBonusStats(bonusStatsRepository.save(kuroro.getBonusStats()));
+      teamKuroro.setTeam(team);
       teamKuroroRepository.save(teamKuroro);
     }
 
@@ -107,8 +114,7 @@ public class TeamService {
   }
 
   public void deleteTeam(Long id) {
-    Team team = getTeam(id);
-    teamRepository.delete(team);
+    teamRepository.deleteById(id);
   }
 
   public List<TeamResponse> getTeamsAndKurorosByUserId(Long userId) {
