@@ -1,21 +1,23 @@
 package br.com.stratzord.kuroro.service;
 
-import br.com.stratzord.kuroro.domain.model.Move;
+import br.com.stratzord.kuroro.domain.dto.MoveDto;
+import br.com.stratzord.kuroro.domain.parser.MoveMapper;
 import br.com.stratzord.kuroro.infrastructurure.repository.MoveRepository;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MoveService {
 
-  private MoveRepository moveRepository;
+  private final static MoveMapper moveMapper = MoveMapper.INSTANCE;
+  private final MoveRepository moveRepository;
 
   public MoveService(MoveRepository moveRepository) {
     this.moveRepository = moveRepository;
   }
 
-  public List<Move> getAllMoves() {
-    return moveRepository.findAll();
+  public List<MoveDto> getAllMoves() {
+
+    return moveRepository.findAll().stream().map(moveMapper::moveToMoveDto).toList();
   }
 }

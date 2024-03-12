@@ -1,7 +1,9 @@
 package br.com.stratzord.kuroro.service;
 
+import br.com.stratzord.kuroro.domain.dto.KuroroDto;
 import br.com.stratzord.kuroro.domain.model.Kuroro;
 import br.com.stratzord.kuroro.domain.model.Type;
+import br.com.stratzord.kuroro.domain.parser.KuroroMapper;
 import br.com.stratzord.kuroro.exception.KuroroAlreadyExistsException;
 import br.com.stratzord.kuroro.exception.KuroroNotFoundException;
 import br.com.stratzord.kuroro.infrastructurure.repository.KuroroRepository;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class KuroroService {
 
+  private final static KuroroMapper kuroroMapper = KuroroMapper.INSTANCE;
   private final KuroroRepository kuroroRepository;
   private final TypeRepository typeRepository;
 
@@ -22,23 +25,23 @@ public class KuroroService {
   }
 
   @Transactional(readOnly = true)
-  public List<Kuroro> getAllCreatures() {
+  public List<KuroroDto> getAllCreatures() {
     List<Kuroro> creatures = kuroroRepository.findAll();
     if (creatures.isEmpty()) {
       throw new KuroroNotFoundException("No creatures found.");
     }
-    return creatures;
+    return creatures.stream().map(kuroroMapper::kuroroToKuroroDto).toList();
   }
 
   @Transactional(readOnly = true)
-  public Kuroro getCreatureById(String id) {
-    return kuroroRepository.findById(id)
-                           .orElseThrow(() -> new KuroroNotFoundException(
-                               "No creature found with id " + id));
+  public KuroroDto getCreatureById(String id) {
+    return kuroroMapper.kuroroToKuroroDto(kuroroRepository.findById(id)
+                                                          .orElseThrow(() -> new KuroroNotFoundException(
+                                                              "No creature found with id " + id)));
   }
 
   @Transactional
-  public Kuroro saveCreature(Kuroro kuroro) throws KuroroAlreadyExistsException {
+  public KuroroDto saveCreature(Kuroro kuroro) throws KuroroAlreadyExistsException {
     kuroroRepository.findById(kuroro.getId())
                     .ifPresent(value -> {
                       throw new KuroroAlreadyExistsException(
@@ -47,11 +50,11 @@ public class KuroroService {
 
     kuroro.setTypes(updateTypes(kuroro.getTypes()));
 
-    return kuroroRepository.save(kuroro);
+    return kuroroMapper.kuroroToKuroroDto(kuroroRepository.save(kuroro));
   }
 
   @Transactional
-  public Kuroro updateCreature(String id, Kuroro kuroro) {
+  public KuroroDto updateCreature(String id, Kuroro kuroro) {
     Kuroro existingKuroro = kuroroRepository.findById(id)
                                             .orElseThrow(() -> new KuroroNotFoundException(
                                                 "No creature found with id " + id));
@@ -66,7 +69,7 @@ public class KuroroService {
     existingKuroro.setLore(kuroro.getLore());
     existingKuroro.setTypes(updateTypes(kuroro.getTypes()));
 
-    return kuroroRepository.save(existingKuroro);
+    return kuroroMapper.kuroroToKuroroDto(kuroroRepository.save(existingKuroro));
   }
 
   @Transactional

@@ -2,6 +2,7 @@ package br.com.stratzord.kuroro.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ public class Type {
   @Column(name = "type_name", nullable = false, unique = true)
   private String typeName;
 
-  @ManyToMany(mappedBy = "types")
+  @ManyToMany(mappedBy = "types", fetch = FetchType.LAZY)
   private List<Kuroro> kuroros;
 
 }

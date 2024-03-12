@@ -1,5 +1,6 @@
 package br.com.stratzord.kuroro.controller;
 
+import br.com.stratzord.kuroro.domain.dto.KuroroDto;
 import br.com.stratzord.kuroro.domain.model.Kuroro;
 import br.com.stratzord.kuroro.service.KuroroService;
 import java.util.List;
@@ -25,22 +26,22 @@ public class KuroroController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Kuroro>> getAllCreatures() {
+  public ResponseEntity<List<KuroroDto>> getAllCreatures() {
     return new ResponseEntity<>(kuroroService.getAllCreatures(), HttpStatus.OK);
   } 
 
   @GetMapping("/{id}")
-  public ResponseEntity<Kuroro> getCreatureById(@PathVariable String id) {
+  public ResponseEntity<KuroroDto> getCreatureById(@PathVariable String id) {
     return new ResponseEntity<>(kuroroService.getCreatureById(id), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<Kuroro> saveCreature(@RequestBody Kuroro kuroro) {
+  public ResponseEntity<KuroroDto> saveCreature(@RequestBody Kuroro kuroro) {
     return new ResponseEntity<>(kuroroService.saveCreature(kuroro), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Kuroro> updateCreature(@PathVariable String id, @RequestBody Kuroro kuroro) {
+  public ResponseEntity<KuroroDto> updateCreature(@PathVariable String id, @RequestBody Kuroro kuroro) {
     return new ResponseEntity<>(kuroroService.updateCreature(id, kuroro), HttpStatus.OK);
   }
 

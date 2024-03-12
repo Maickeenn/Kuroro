@@ -1,6 +1,6 @@
 package br.com.stratzord.kuroro.controller;
 
-import br.com.stratzord.kuroro.domain.model.Move;
+import br.com.stratzord.kuroro.domain.dto.MoveDto;
 import br.com.stratzord.kuroro.service.MoveService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class MoveController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Move>> getAllCreatures() {
+  public ResponseEntity<List<MoveDto>> getAllCreatures() {
     return new ResponseEntity<>(moveService.getAllMoves(), HttpStatus.OK);
   }
 
