@@ -1,6 +1,8 @@
 package br.com.stratzord.kuroro.service;
 
+import br.com.stratzord.kuroro.domain.dto.UserDto;
 import br.com.stratzord.kuroro.domain.model.User;
+import br.com.stratzord.kuroro.domain.parser.UserMapper;
 import br.com.stratzord.kuroro.exception.UserAlreadyExistsException;
 import br.com.stratzord.kuroro.exception.UserNotFoundException;
 import br.com.stratzord.kuroro.infrastructurure.repository.UserRepository;
@@ -17,35 +19,32 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public List<User> findAll() {
-    return userRepository.findAll();
+  @Transactional(readOnly = true)
+  public UserDto findById(Long id) {
+    return UserMapper.INSTANCE.userToUserDto(userRepository.findById(id)
+                                                           .orElseThrow(() -> new UserNotFoundException(
+                                                               "No user found with id " + id)));
   }
 
   @Transactional(readOnly = true)
-  public User findById(Long id) {
-    return userRepository.findById(id)
-                         .orElseThrow(() -> new UserNotFoundException(
-                             "No user found with id " + id));
-  }
-
-  @Transactional(readOnly = true)
-  public User findByNickname(String nickname) {
-    return userRepository.findByNickname(nickname)
-                         .orElseThrow(() -> new UserNotFoundException(
-                             "No user found with nickname " + nickname));
+  public UserDto findByNickname(String nickname) {
+    return UserMapper.INSTANCE.userToUserDto(userRepository.findByNickname(nickname)
+                                                           .orElseThrow(() -> new UserNotFoundException(
+                                                               "No user found with nickname " +
+                                                               nickname)));
   }
 
   @Transactional
-  public User save(User user) {
+  public UserDto save(User user) {
     userRepository.findByNickname(user.getNickname()).ifPresent(existingUser -> {
       throw new UserAlreadyExistsException(
           "A user with nickname " + user.getNickname() + " already exists.");
     });
-    return userRepository.save(user);
+    return UserMapper.INSTANCE.userToUserDto(userRepository.save(user));
   }
 
   @Transactional
-  public User updateUser(Long id, User user) {
+  public UserDto updateUser(Long id, User user) {
     User existingUser = userRepository.findById(id)
                                       .orElseThrow(() -> new UserNotFoundException(
                                           "No user found with id " + id));
@@ -53,13 +52,14 @@ public class UserService {
     existingUser.setNickname(user.getNickname());
     existingUser.setPassword(user.getPassword());
 
-    return userRepository.save(existingUser);
+    return UserMapper.INSTANCE.userToUserDto(userRepository.save(existingUser));
   }
 
   @Transactional
   public void deleteById(Long id) {
-    User existingUser = findById(id);
-    userRepository.delete(existingUser);
+    userRepository.delete(userRepository.findById(id)
+                                        .orElseThrow(() -> new UserNotFoundException(
+                                            "No user found with id " + id)));
   }
 
 }

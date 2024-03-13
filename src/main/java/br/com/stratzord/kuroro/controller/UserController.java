@@ -1,6 +1,7 @@
 package br.com.stratzord.kuroro.controller;
 
 
+import br.com.stratzord.kuroro.domain.dto.UserDto;
 import br.com.stratzord.kuroro.domain.model.User;
 import br.com.stratzord.kuroro.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -25,22 +26,22 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable Long id) {
+  public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
     return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
   }
 
   @GetMapping("/nickname/{nickname}")
-  public ResponseEntity<User> getUserByNickname(@PathVariable String nickname) {
+  public ResponseEntity<UserDto> getUserByNickname(@PathVariable String nickname) {
     return new ResponseEntity<>(userService.findByNickname(nickname), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<User> saveUser(@RequestBody User user) {
+  public ResponseEntity<UserDto> saveUser(@RequestBody User user) {
     return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+  public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody User user) {
     return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
   }
 
