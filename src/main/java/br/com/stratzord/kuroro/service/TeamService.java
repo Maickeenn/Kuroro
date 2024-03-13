@@ -155,7 +155,7 @@ public class TeamService {
 
   public TeamKuroroResponse mapTeamKuroroToTeamKuroroResponse(TeamKuroro teamKuroro) {
     return TeamKuroroResponse.builder()
-                             .kuroroId(teamKuroro.getKuroro().getInternalId())
+                             .kuroroId(teamKuroro.getKuroro().getId())
                              .moves(teamKuroro.getMoves()
                                               .stream()
                                               .map(Move::getId)

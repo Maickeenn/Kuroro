@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class TeamKuroroResponse {
-  private Long kuroroId;
+  private String kuroroId;
   private List<Long> moves;
   private BonusStats bonusStats;
 }
