@@ -98,7 +98,7 @@ public class TeamService {
       TeamKuroro teamKuroro = new TeamKuroro();
       teamKuroro.setKuroro(kuroroRepository.findById(kuroro.getKuroroId())
                                            .orElseThrow(() -> new TeamNotFoundException(
-                                               "No kuroro found with id " + kuroro)));
+                                               "No kuroro found with id " + kuroro.getKuroroId())));
       teamKuroro.setMoves(kuroro.getMoves()
                                 .stream()
                                 .map(move -> moveRepository.findById(Long.valueOf(move))
@@ -147,7 +147,7 @@ public class TeamService {
 
     return TeamResponse.builder()
                        .teamId(team.getId())
-                       .userId(team.getUser().getId())
+                       .userNickname(team.getUser().getNickname())
                        .name(team.getName())
                        .kuroros(kuroroResponses)
                        .build();

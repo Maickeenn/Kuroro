@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class TeamKuroroRequest {
 
-  private long kuroroId;
+  private String kuroroId;
   private List<Integer> moves;
   private BonusStats bonusStats;
 

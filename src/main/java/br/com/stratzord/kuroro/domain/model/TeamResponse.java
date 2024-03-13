@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class TeamResponse {
   private Long teamId;
-  private Long userId;
+  private String userNickname;
   private String name;
   private Set<TeamKuroroResponse> kuroros;
 }
