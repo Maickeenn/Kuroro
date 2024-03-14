@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class KuroroDto {
-  private Long id;
+  private String id;
   private String name;
   private int hitPoints;
   private int attack;
